@@ -12,19 +12,17 @@ function explodeByOperationGroup(string $expr)
         if ($value == "(") $openParenthese++;
         if ($value == ")") $openParenthese--;
 
-        if ($openParenthese != 0) {
+        if ($openParenthese != 0 || !in_array($value, $operators)) {
             $block[] = $value;
-        } else if (in_array($value, $operators)) {
-            $operationBGroups[] = implode($block);
-            $operationBGroups[] = $value;
-            $block = [];
         } else {
-            $block[] = $value;
+            $operationGroups[] = implode($block);
+            $operationGroups[] = $value;
+            $block = [];
         }
     }
-    $operationBGroups[] = implode($block);
+    $operationGroups[] = implode($block);
 
-    return $operationBGroups;
+    return $operationGroups;
 }
 
 function findLowestPriorityOperator(array $expr)
@@ -43,7 +41,6 @@ function findLowestPriorityOperator(array $expr)
     }
 
     if($lowPrio == null) return false;
-
     return [$lowPrio['key'], $lowPrio['operator']];
 }
 
