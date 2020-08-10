@@ -22,6 +22,9 @@ function explodeByOperationGroup(string $expr)
     }
     $operationGroups[] = implode($block);
 
+    if (count($operationGroups) == 1 && !preg_match("/[+\-*\/%]+/", $operationGroups[0])) 
+        $operationGroups[0] = trim($operationGroups[0], '()');
+
     return $operationGroups;
 }
 

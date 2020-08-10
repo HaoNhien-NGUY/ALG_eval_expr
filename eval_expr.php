@@ -4,10 +4,14 @@ require_once('./fn.php');
 
 function eval_expr(string $expr)
 {
-    //remove first and last parentheses if there are.
-    if ($expr[0] == '(' && substr($expr, -1) == ')') $expr = substr(substr($expr, 0, strlen($expr) - 1), 1);
-
-    $expr = explodeByOperationGroup($expr);
+    do {
+        if (is_array($expr)) {
+            $expr = implode($expr);
+            $expr = substr(substr($expr, 0, strlen($expr) - 1), 1);
+        }
+        $expr = explodeByOperationGroup($expr);
+    } while (count($expr) == 1 && preg_match("/[+\-*\/%]+/", $expr[0]) && $expr[0][0] == '(' && substr($expr[0], -1) == ')');
+    
     $lowestPrio = findLowestPriorityOperator($expr);
 
     if(!$lowestPrio) return $expr[0];
@@ -22,6 +26,8 @@ function eval_expr(string $expr)
 
 // echo eval_expr("(((3-4*13)/32)*1+235/8*8+3)"); //236.46875
 // echo eval_expr("(((3-4*13)/32)*1+235/8%20*8+3)"); //76.46875
-echo eval_expr("((3*5-4*7)/1+1)-1/8*8+3"); // -10
+// echo eval_expr("((3*5-4*7)/1+1)-1/8*8+3"); // -10
+// echo eval_expr("((((3+4)+(2+1))))");
+echo eval_expr("(((((100))))-(((3+2)))*2)/(3-2)");
 
 echo PHP_EOL;
