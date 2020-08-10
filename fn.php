@@ -23,11 +23,11 @@ function explodeByOperationGroup(string $expr)
     $operationGroups[] = implode($block);
 
     if (count($operationGroups) == 1) {
-        $haveOperator = preg_match("/[+\-*\/%]+/", $operationGroups[0]);
-        if (!$haveOperator) {
-            return [trim($operationGroups[0], '()')];
-        } else if ($haveOperator && $operationGroups[0][0] == '(' && substr($operationGroups[0], -1) == ')') {
-            $expr = implode($operationGroups);
+        $expr = $operationGroups[0];
+        $hasOperator = preg_match("/[+\-*\/%]+/", $expr);
+        if (!$hasOperator) {
+            return [trim($expr, '()')];
+        } else if ($expr[0] == '(' && substr($expr, -1) == ')') {
             $expr = substr(substr($expr, 0, strlen($expr) - 1), 1);
             return explodeByOperationGroup($expr);
         }
