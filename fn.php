@@ -22,8 +22,13 @@ function explodeByOperationGroup(string $expr)
     }
     $operationGroups[] = implode($block);
 
-    if (count($operationGroups) == 1 && !preg_match("/[+\-*\/%]+/", $operationGroups[0])) 
-        $operationGroups[0] = trim($operationGroups[0], '()');
+    if (count($operationGroups) == 1 && !preg_match("/[+\-*\/%]+/", $operationGroups[0])) {
+        return [trim($operationGroups[0], '()')];
+    } else if (count($operationGroups) == 1 && preg_match("/[+\-*\/%]+/", $operationGroups[0]) && $operationGroups[0][0] == '(' && substr($operationGroups[0], -1) == ')') {
+        $expr = implode($operationGroups);
+        $expr = substr(substr($expr, 0, strlen($expr) - 1), 1);
+        return explodeByOperationGroup($expr);
+    }
 
     return $operationGroups;
 }
@@ -43,7 +48,7 @@ function findLowestPriorityOperator(array $expr)
         }
     }
 
-    if($lowPrio == null) return false;
+    if ($lowPrio == null) return false;
     return [$lowPrio['key'], $lowPrio['operator']];
 }
 
