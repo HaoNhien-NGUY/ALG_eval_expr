@@ -22,8 +22,8 @@ function explodeByOperationGroup(string $expr)
     }
     $operationGroups[] = implode($block);
 
-    $haveOperator = preg_match("/[+\-*\/%]+/", $operationGroups[0]);
     if (count($operationGroups) == 1) {
+        $haveOperator = preg_match("/[+\-*\/%]+/", $operationGroups[0]);
         if (!$haveOperator) {
             return [trim($operationGroups[0], '()')];
         } else if ($haveOperator && $operationGroups[0][0] == '(' && substr($operationGroups[0], -1) == ')') {
