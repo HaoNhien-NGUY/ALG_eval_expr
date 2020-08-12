@@ -57,6 +57,9 @@ function findLowestPriorityOperator(array $expr)
 
 function calculate($nb1, string $operator, $nb2)
 {
+    if(!is_numeric($nb1) || !is_numeric($nb2))
+        exit("Malformed expression." . PHP_EOL);
+
     switch (trim($operator)) {
         case '+':
             return $nb1 + $nb2;

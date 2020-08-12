@@ -4,9 +4,10 @@ require_once('./fn.php');
 
 function eval_expr(string $expr)
 {
+    if(!strlen($expr)) return 0;
+
     $expr = explodeByOperationGroup($expr);
-    if (count($expr) == 1) 
-        return $expr[0];
+    if (count($expr) == 1) return $expr[0];
 
     [$operatorKey, $operator] = findLowestPriorityOperator($expr);
 
